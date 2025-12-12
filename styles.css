@@ -54,24 +54,80 @@ body{
 .content{ width:100%; max-width:var(--maxw); padding:22px; }
 .section{ margin:18px 0 60px; background:transparent; padding:8px 12px; border-radius:8px; }
 
+/* center main section headings */
+.section h1,
+.section h2 {
+  text-align: center;
+  margin: 0 0 12px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
 /* anchor offset helper so target appears below fixed nav */
 #scenario, #attendees { scroll-margin-top: calc(var(--nav-h) + 12px); }
 
-/* gallery */
+/* ---------- GALLERY: stacked, no cropping ---------- */
+/* single-column stack so each image keeps its natural aspect ratio */
 .gallery{
-  display:grid;
-  gap:var(--gap);
-  grid-template-columns:repeat(auto-fit, minmax(160px,1fr));
+  display: grid;
+  grid-template-columns: 1fr; /* single column stack */
+  gap: 20px;
+  width: 100%;
+  max-width: var(--maxw);
+  margin: 0 auto;
 }
+
+/* images: full-width, preserve aspect ratio (no crop) */
 .attendee img{
-  width:100%;
-  height:220px;
-  object-fit:cover;
-  border-radius:8px;
-  display:block;
-  box-shadow:0 8px 24px rgba(0,0,0,.5);
+  width: 100%;
+  height: auto;          /* preserve whole image */
+  object-fit: none;      /* ensure no cover cropping */
+  display: block;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.5);
+  transition: transform .28s cubic-bezier(.2,.9,.3,1), box-shadow .28s;
 }
-.attendee{ text-align:center; font-size:.95rem; color:#ddd; margin:0; }
+
+/* attendee wrapper and caption */
+.attendee{
+  text-align:center;
+  font-size:.95rem;
+  color:#ddd;
+  margin:0;
+  transition: transform .28s cubic-bezier(.2,.9,.3,1);
+  will-change: transform;
+  background: transparent;
+  padding-bottom: 4px;
+}
+
+/* caption sits below image */
+.attendee figcaption{
+  margin-top:10px;
+  color: var(--text);
+  font-weight:600;
+  text-align:center;
+  background: transparent;
+  padding: 0 6px 6px;
+}
+
+/* ---------- subtle hover/focus animation ---------- */
+/* small lift + tiny scale on hover or focus (keyboard accessible) */
+.attendee:hover,
+.attendee:focus {
+  transform: translateY(-6px) scale(1.01);
+  z-index: 2;
+}
+.attendee:hover img,
+.attendee:focus img {
+  transform: scale(1.02);
+  box-shadow: 0 18px 50px rgba(0,0,0,0.55);
+}
+
+/* keyboard focus outline for accessibility */
+.attendee:focus {
+  outline: 3px solid rgba(232,76,61,0.12);
+  outline-offset: 4px;
+}
 
 /* footer */
 .site-footer{ padding:20px 0; opacity:.9; margin-bottom:40px; }
@@ -79,5 +135,6 @@ body{
 /* responsive tweaks */
 @media (max-width:520px){
   .topnav .nav-inner{ padding:0 10px }
-  .attendee img{ height:140px }
+  /* ensure images stay natural on small screens */
+  .attendee img{ height: auto; }
 }
