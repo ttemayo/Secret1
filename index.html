@@ -36,7 +36,7 @@
           Some optional / additional text here
         </p>
     
-        <button class="scenario-toggle" aria-expanded="false">Read more</button>
+        <button type="button" class="scenario-toggle" aria-expanded="false">Read more</button>
       </div>
     </section>
 
@@ -69,22 +69,58 @@
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const card = document.querySelector('.scenario-card');
-      if(!card) return;
+      if (!card) return;
+    
       const btn = card.querySelector('.scenario-toggle');
-      btn.addEventListener('click', () => {
-        const expanded = card.classList.toggle('expanded');
+      const more = card.querySelector('.scenario-more');
+    
+      // Defensive: if elements missing, bail gracefully
+      if (!btn || !more) {
+        console.warn('Scenario toggle or more content not found.');
+        return;
+      }
+    
+      // Ensure collapsed initial state
+      more.style.maxHeight = more.classList.contains('expanded') ? `${more.scrollHeight}px` : '0px';
+      more.setAttribute('aria-hidden', more.style.maxHeight === '0px' ? 'true' : 'false');
+    
+      function setExpanded(expanded) {
         btn.setAttribute('aria-expanded', expanded ? 'true' : 'false');
-        // update aria-hidden on the extra paragraph
-        const more = card.querySelector('.scenario-more');
-        if(more) more.setAttribute('aria-hidden', expanded ? 'false' : 'true');
+        if (expanded) {
+          // set to exact scrollHeight so transition animates correctly
+          more.style.maxHeight = `${more.scrollHeight}px`;
+          more.setAttribute('aria-hidden', 'false');
+          card.classList.add('expanded');
+        } else {
+          // collapse
+          more.style.maxHeight = '0px';
+          more.setAttribute('aria-hidden', 'true');
+          card.classList.remove('expanded');
+        }
+      }
+    
+      // click handler
+      btn.addEventListener('click', () => {
+        const isExpanded = btn.getAttribute('aria-expanded') === 'true';
+        setExpanded(!isExpanded);
       });
-      // allow Enter/Space on the whole card to toggle (keyboard)
+    
+      // keyboard toggle on Enter/Space when card focused
       card.addEventListener('keydown', (e) => {
-        if(e.key === 'Enter' || e.key === ' ') {
+        if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
           btn.click();
         }
       });
+    
+      // Optional: when the panel finishes expanding, clear inline maxHeight to allow responsive wrapping
+      more.addEventListener('transitionend', (ev) => {
+        if (ev.propertyName === 'max-height' && btn.getAttribute('aria-expanded') === 'true') {
+          // allow it to size naturally after animation
+          more.style.maxHeight = 'none';
+        }
+      });
+    
     });
     </script>
     
