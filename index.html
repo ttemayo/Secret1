@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Murder Mystery #1</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- Fixed top nav -->
+  <nav class="topnav">
+    <div class="nav-inner">
+      <a class="logo" href="#scenario">Murder Mystery</a>
+      <div class="links">
+        <a href="#scenario">Scenario</a>
+        <a href="#attendees">Attendees</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="content">
+    <!-- Scenario section (top text block) -->
+    <section id="scenario" class="section">
+      <h1>Scenario</h1>
+      <p>
+        It's a stinky evening at the Naghmi manor. A scream breaks the night, and now
+        everyone is a suspect. Read below and meet the guests.
+      </p>
+    </section>
+
+    <!-- Attendees (gallery) -->
+    <section id="attendees" class="section">
+      <h2>Attendees</h2>
+      <div class="gallery">
+        <!-- Repeat one line per attendee image -->
+        <figure class="attendee">
+          <img src="images/attendee1.png" alt="Zain, the host" loading="lazy">
+          <figcaption>Zain Naghmi</figcaption>
+        </figure>
+
+        <figure class="attendee">
+          <img src="images/attendee2.png" alt="Mario, the" loading="lazy">
+          <figcaption>Mario Melchor</figcaption>
+        </figure>
+
+        <!-- more attendee <figure> blocks for each photo -->
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    © Kevin Hoang
+  </footer>
+
+  <script>
+    // Optional: make anchor scrolling offset friendly for the fixed nav
+    // CSS already uses scroll-margin-top, but for JS fallback:
+    (function(){
+      // nothing required here, kept for future tweaks
+    })();
+  </script>
+</body>
+</html>
