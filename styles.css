@@ -93,7 +93,7 @@ body{
   margin:0 0 12px;
   font-weight:700;
   letter-spacing:-0.02em;
-  font-size: clamp(1.25rem, 2.2vw + 0.6rem, 2rem); /* responsive sizing ~20–32px */
+  font-size: clamp(1.25rem, 2.2vw + 0.6rem, 2rem);
   line-height:1.08;
 }
 
@@ -109,7 +109,7 @@ body{
   box-shadow:0 10px 30px rgba(0,0,0,0.55);
   transition: transform .28s cubic-bezier(.2,.9,.3,1), box-shadow .28s, background .28s;
   max-width: calc(var(--maxw) - 40px);
-  margin:0 auto;
+  margin:0 auto 8px;
   position:relative;
 }
 .scenario-lead::first-letter{
@@ -160,12 +160,35 @@ body{
 }
 @keyframes gallery-enter{ to{ opacity:1; transform:none } }
 
-/* images: keep whole image, no crop */
-.attendee{ text-align:center; font-size:.95rem; color:#ddd; margin:0; padding-bottom:4px; transition: transform .28s cubic-bezier(.2,.9,.3,1); will-change:transform; border-radius:10px; background:transparent; position:relative; overflow:visible; }
+/* ---------- ATTENDEE / IMAGE RULES ---------- */
+/* layout for figure: center content so smaller images sit nicely */
+.attendee{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+  font-size:.95rem;
+  color:#ddd;
+  margin:0;
+  padding-bottom:8px;
+  transition: transform .28s cubic-bezier(.2,.9,.3,1);
+  will-change:transform;
+  border-radius:10px;
+  background:transparent;
+  position:relative;
+  overflow:visible;
+}
+
+/* images:
+   - use intrinsic width by default (width:auto)
+   - never exceed container width (max-width:100%)
+   - let large images scale down; small images will not be upscaled
+*/
 .attendee img{
-  width:100%;
+  width:auto;            /* intrinsic size preserved */
+  max-width:100%;        /* but never overflow container */
   height:auto;
-  object-fit:contain; /* preserve whole image; uses letterboxing if aspect varies */
+  object-fit:contain;    /* preserve whole image */
   display:block;
   border-radius:10px;
   box-shadow:0 8px 24px rgba(0,0,0,0.5);
@@ -185,7 +208,7 @@ body{
   pointer-events:none; text-align:center;
 }
 
-/* hover / focus polish */
+/* hover / focus polish (small lift + scale on hover only) */
 .attendee:hover,
 .attendee:focus{ transform: translateY(-6px); z-index:2; outline:none; }
 .attendee:hover img,
@@ -219,6 +242,11 @@ body{
   .scenario-card{ padding:14px; border-radius:10px; }
   .attendee .overlay{ left:8px; right:8px; bottom:8px; padding:6px 8px; font-size:.95rem; }
   .attendee figcaption{ font-size:1rem; }
-  /* on very small screens let images scale naturally */
-  .attendee img{ object-fit:contain; height:auto; }
+  /* on small screens, make images fill width for readability */
+  .attendee img{
+    width:100%;
+    max-width:100%;
+    height:auto;
+    object-fit:cover;
+  }
 }
