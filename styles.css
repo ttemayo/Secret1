@@ -6,29 +6,39 @@
   --text:#f3f3f3;
   --gap:12px;
   --maxw:1000px;
+
+  /* polish vars */
+  --glass-alpha:0.12;
+  --nav-blur:6px;
+  --accent-grad-start:#ff5a52;
+  --accent-grad-end:#ff7b6c;
+  --muted:#a6aab0;
 }
+
+/* reset / layout */
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{
   margin:0;
-  font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
   background:var(--bg);
   color:var(--text);
-  padding-top:var(--nav-h); /* space for fixed nav */
+  padding-top:var(--nav-h); /* room for fixed nav */
   display:flex;
   flex-direction:column;
   align-items:center;
 }
 
-/* top nav (fixed) */
+/* ---------- NAV (fixed) ---------- */
 .topnav{
   position:fixed;
-  top:0;
-  left:0;
-  right:0;
+  inset:0 0 auto 0;
   height:var(--nav-h);
-  background:linear-gradient(180deg, rgba(0,0,0,.9), rgba(0,0,0,.85));
-  border-bottom:1px solid rgba(255,255,255,.04);
+  background: linear-gradient(180deg, rgba(12,12,13,0.78), rgba(10,10,11,0.72));
+  -webkit-backdrop-filter: blur(var(--nav-blur));
+  backdrop-filter: blur(var(--nav-blur));
+  border-bottom:1px solid rgba(255,255,255,0.04);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.45);
   z-index:1000;
   display:flex;
   align-items:center;
@@ -42,99 +52,173 @@ body{
   justify-content:space-between;
   padding:0 16px;
 }
-.topnav a{
+.topnav .logo{ font-size:1.05rem; color:var(--text); text-decoration:none; font-weight:700; }
+.topnav .links { display:flex; gap:8px; align-items:center; }
+.topnav .links a{
+  position:relative;
   color:var(--text);
   text-decoration:none;
-  margin-left:12px;
+  padding:6px 8px;
+  border-radius:6px;
   font-weight:600;
+  transition: transform .18s ease, color .18s ease;
 }
-.topnav .logo{ font-size:1.05rem }
+.topnav .links a::after{
+  content:'';
+  position:absolute;
+  left:10%;
+  right:10%;
+  bottom:-8px;
+  height:3px;
+  background: linear-gradient(90deg, var(--accent-grad-start), var(--accent-grad-end));
+  border-radius:6px;
+  transform: scaleX(0);
+  transform-origin:left center;
+  transition: transform .28s cubic-bezier(.2,.9,.3,1);
+  opacity:0.95;
+}
+.topnav .links a:hover,
+.topnav .links a:focus{ transform: translateY(-3px); outline:none; }
+.topnav .links a:hover::after,
+.topnav .links a.active::after { transform: scaleX(1); }
 
-/* main content */
+/* ---------- MAIN / CONTENT ---------- */
 .content{ width:100%; max-width:var(--maxw); padding:22px; }
 .section{ margin:18px 0 60px; background:transparent; padding:8px 12px; border-radius:8px; }
 
-/* center main section headings */
+/* headings: make H2 visually match H1 (responsive) */
 .section h1,
 .section h2 {
-  text-align: center;
-  margin: 0 0 12px;
-  font-weight: 700;
-  letter-spacing: -0.02em;
+  text-align:center;
+  margin:0 0 12px;
+  font-weight:700;
+  letter-spacing:-0.02em;
+  font-size: clamp(1.25rem, 2.2vw + 0.6rem, 2rem); /* responsive sizing ~20–32px */
+  line-height:1.08;
 }
 
-/* anchor offset helper so target appears below fixed nav */
+/* anchor helper so fixed nav doesn't cover target */
 #scenario, #attendees { scroll-margin-top: calc(var(--nav-h) + 12px); }
 
-/* ---------- GALLERY: stacked, no cropping ---------- */
-/* single-column stack so each image keeps its natural aspect ratio */
+/* ---------- SCENARIO CARD ---------- */
+.scenario-card{
+  background: linear-gradient(180deg, rgba(255,255,255,var(--glass-alpha)), rgba(255,255,255,0.02));
+  border:1px solid rgba(255,255,255,0.03);
+  padding:18px;
+  border-radius:12px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.55);
+  transition: transform .28s cubic-bezier(.2,.9,.3,1), box-shadow .28s, background .28s;
+  max-width: calc(var(--maxw) - 40px);
+  margin:0 auto;
+  position:relative;
+}
+.scenario-lead::first-letter{
+  font-size:1.5rem;
+  font-weight:800;
+  color:var(--accent);
+  float:left;
+  margin-right:8px;
+  line-height:1;
+}
+.scenario-more{
+  max-height:0;
+  overflow:hidden;
+  opacity:0;
+  transition: max-height .36s ease, opacity .36s ease;
+  margin-top:10px;
+  color:var(--muted);
+  font-size:.98rem;
+  line-height:1.6;
+}
+.scenario-card.expanded .scenario-more{ max-height:400px; opacity:1; }
+.scenario-card:hover,
+.scenario-card:focus-within{ transform: translateY(-6px); box-shadow:0 22px 60px rgba(0,0,0,0.65); }
+.scenario-toggle{
+  margin-top:12px;
+  background:transparent;
+  color:var(--accent);
+  border:0;
+  font-weight:700;
+  cursor:pointer;
+  padding:6px 10px;
+  border-radius:8px;
+  transition: background .18s, transform .18s;
+}
+.scenario-toggle:hover{ background: rgba(255,255,255,0.02); transform: translateY(-2px); }
+
+/* ---------- GALLERY (stacked single column) ---------- */
 .gallery{
-  display: grid;
-  grid-template-columns: 1fr; /* single column stack */
-  gap: 20px;
-  width: 100%;
-  max-width: var(--maxw);
-  margin: 0 auto;
+  display:grid;
+  grid-template-columns:1fr; /* stacked */
+  gap:20px;
+  width:100%;
+  max-width:var(--maxw);
+  margin:0 auto;
+  opacity:0;
+  transform: translateY(6px);
+  animation: gallery-enter .6s ease forwards .12s;
 }
+@keyframes gallery-enter{ to{ opacity:1; transform:none } }
 
-/* images: full-width, preserve aspect ratio (no crop) */
+/* images: keep whole image, no crop */
+.attendee{ text-align:center; font-size:.95rem; color:#ddd; margin:0; padding-bottom:4px; transition: transform .28s cubic-bezier(.2,.9,.3,1); will-change:transform; border-radius:10px; background:transparent; position:relative; overflow:visible; }
 .attendee img{
-  width: 100%;
-  height: auto;          /* preserve whole image */
-  object-fit: none;      /* ensure no cover cropping */
-  display: block;
-  border-radius: 8px;
-  box-shadow: 0 8px 24px rgba(0,0,0,.5);
-  transition: transform .28s cubic-bezier(.2,.9,.3,1), box-shadow .28s;
+  width:100%;
+  height:auto;
+  object-fit:contain; /* preserve whole image; uses letterboxing if aspect varies */
+  display:block;
+  border-radius:10px;
+  box-shadow:0 8px 24px rgba(0,0,0,0.5);
+  transition: transform .36s cubic-bezier(.2,.9,.3,1), filter .36s, box-shadow .36s;
+  filter:grayscale(.14) contrast(.98) saturate(.95);
 }
 
-/* attendee wrapper and caption */
-.attendee{
-  text-align:center;
-  font-size:.95rem;
-  color:#ddd;
-  margin:0;
-  transition: transform .28s cubic-bezier(.2,.9,.3,1);
-  will-change: transform;
-  background: transparent;
-  padding-bottom: 4px;
+/* overlay (hidden until hover) */
+.attendee .overlay{
+  position:absolute;
+  left:12px; right:12px; bottom:12px;
+  padding:8px 12px;
+  background:linear-gradient(180deg, rgba(0,0,0,0), rgba(0,0,0,0.62));
+  color:#fff; font-weight:700;
+  border-radius:8px; transform:translateY(12px); opacity:0;
+  transition: transform .28s ease, opacity .28s ease;
+  pointer-events:none; text-align:center;
 }
 
-/* caption sits below image */
+/* hover / focus polish */
+.attendee:hover,
+.attendee:focus{ transform: translateY(-6px); z-index:2; outline:none; }
+.attendee:hover img,
+.attendee:focus img{ transform: scale(1.03); filter:none; box-shadow:0 20px 60px rgba(0,0,0,0.6); }
+.attendee:hover .overlay,
+.attendee:focus .overlay{ transform: translateY(0); opacity:1; pointer-events:auto; }
+
+/* caption under image — larger and clearer */
 .attendee figcaption{
   margin-top:10px;
-  color: var(--text);
-  font-weight:600;
+  color:var(--muted);
+  font-weight:700;
   text-align:center;
-  background: transparent;
-  padding: 0 6px 6px;
+  font-size:1.05rem; /* larger caption */
+  letter-spacing:-0.01em;
+  padding:6px 8px 10px;
+  display:inline-block;
+  background: rgba(255,255,255,0.02);
+  border-radius:6px;
 }
 
-/* ---------- subtle hover/focus animation ---------- */
-/* small lift + tiny scale on hover or focus (keyboard accessible) */
-.attendee:hover,
-.attendee:focus {
-  transform: translateY(-6px) scale(1.01);
-  z-index: 2;
-}
-.attendee:hover img,
-.attendee:focus img {
-  transform: scale(1.02);
-  box-shadow: 0 18px 50px rgba(0,0,0,0.55);
-}
-
-/* keyboard focus outline for accessibility */
-.attendee:focus {
-  outline: 3px solid rgba(232,76,61,0.12);
-  outline-offset: 4px;
-}
+/* keyboard focus styling */
+.attendee:focus{ outline:3px solid rgba(232,76,61,0.10); outline-offset:6px; }
 
 /* footer */
 .site-footer{ padding:20px 0; opacity:.9; margin-bottom:40px; }
 
 /* responsive tweaks */
 @media (max-width:520px){
-  .topnav .nav-inner{ padding:0 10px }
-  /* ensure images stay natural on small screens */
-  .attendee img{ height: auto; }
+  .topnav .nav-inner{ padding:0 10px; }
+  .scenario-card{ padding:14px; border-radius:10px; }
+  .attendee .overlay{ left:8px; right:8px; bottom:8px; padding:6px 8px; font-size:.95rem; }
+  .attendee figcaption{ font-size:1rem; }
+  /* on very small screens let images scale naturally */
+  .attendee img{ object-fit:contain; height:auto; }
 }

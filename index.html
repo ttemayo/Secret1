@@ -23,10 +23,21 @@
     <!-- Scenario section (top text block) -->
     <section id="scenario" class="section">
       <h1>Scenario</h1>
-      <p>
-        It's a stinky evening at the Naghmi manor. A scream breaks the night, and now
-        everyone is a suspect. Read below and meet the guests.
-      </p>
+    
+      <!-- new wrapper -->
+      <div class="scenario-card" role="region" aria-labelledby="scenario-heading" tabindex="0">
+        <p class="scenario-lead">
+          It's a stinky evening at the Naghmi manor. A scream breaks the night, and now
+          everyone is a suspect. Read below and meet the guests.
+        </p>
+    
+        <!-- optional extra text that is hidden until expand -->
+        <p class="scenario-more" aria-hidden="true">
+          Some optional / additional text here
+        </p>
+    
+        <button class="scenario-toggle" aria-expanded="false">Read more</button>
+      </div>
     </section>
 
     <!-- Attendees (gallery) -->
@@ -34,14 +45,16 @@
       <h2>Attendees</h2>
       <div class="gallery">
         <!-- Repeat one line per attendee image -->
-        <figure class="attendee">
+        <figure class="attendee" tabindex="0" data-name="Zain, the host">
           <img src="images/attendee1.png" alt="Zain, the host" loading="lazy">
-          <figcaption>Zain, the</figcaption>
+          <figcaption>Zain, the host</figcaption>
+          <span class="overlay" aria-hidden="true">Host • Suspect</span>
         </figure>
 
-        <figure class="attendee">
-          <img src="images/attendee2.png" alt="Mario, the" loading="lazy">
-          <figcaption>Mario, </figcaption>
+        <figure class="attendee" tabindex="0" data-name="Mario, the ">
+          <img src="images/attendee2.png" alt="Mario, the " loading="lazy">
+          <figcaption>Mario, the ?</figcaption>
+          <span class="overlay" aria-hidden="true">Guest • Suspect</span>
         </figure>
 
         <!-- more attendee <figure> blocks for each photo -->
@@ -54,11 +67,26 @@
   </footer>
 
   <script>
-    // Optional: make anchor scrolling offset friendly for the fixed nav
-    // CSS already uses scroll-margin-top, but for JS fallback:
-    (function(){
-      // nothing required here, kept for future tweaks
-    })();
-  </script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const card = document.querySelector('.scenario-card');
+      if(!card) return;
+      const btn = card.querySelector('.scenario-toggle');
+      btn.addEventListener('click', () => {
+        const expanded = card.classList.toggle('expanded');
+        btn.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+        // update aria-hidden on the extra paragraph
+        const more = card.querySelector('.scenario-more');
+        if(more) more.setAttribute('aria-hidden', expanded ? 'false' : 'true');
+      });
+      // allow Enter/Space on the whole card to toggle (keyboard)
+      card.addEventListener('keydown', (e) => {
+        if(e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          btn.click();
+        }
+      });
+    });
+    </script>
+    
 </body>
 </html>
