@@ -88,6 +88,14 @@ body{
   margin:0 auto 8px;
 }
 
+/* DETECTIVE — centered single thumbnail */
+.detective-section .detective-wrapper{
+  display:flex;
+  justify-content:center;
+  padding-top:8px;
+}
+.detective-item{ max-width:320px; display:flex; flex-direction:column; align-items:center; gap:8px; }
+
 /* THUMB GRID - 4 columns */
 .thumb-grid{
   display:grid;
