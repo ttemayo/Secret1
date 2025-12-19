@@ -5,9 +5,8 @@
   --accent:#c33;
   --text:#f3f3f3;
   --gap:12px;
-  --maxw:1000px;
+  --maxw:1320px;
 
-  /* polish vars */
   --glass-alpha:0.12;
   --nav-blur:6px;
   --accent-grad-start:#ff5a52;
@@ -23,13 +22,14 @@ body{
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
   background:var(--bg);
   color:var(--text);
-  padding-top:var(--nav-h); /* room for fixed nav */
+  padding-top:var(--nav-h);
   display:flex;
   flex-direction:column;
   align-items:center;
+  min-height:100vh;
 }
 
-/* ---------- NAV (fixed) ---------- */
+/* NAV */
 .topnav{
   position:fixed;
   inset:0 0 auto 0;
@@ -61,34 +61,12 @@ body{
   padding:6px 8px;
   border-radius:6px;
   font-weight:600;
-  transition: transform .18s ease, color .18s ease;
 }
-.topnav .links a::after{
-  content:'';
-  position:absolute;
-  left:10%;
-  right:10%;
-  bottom:-8px;
-  height:3px;
-  background: linear-gradient(90deg, var(--accent-grad-start), var(--accent-grad-end));
-  border-radius:6px;
-  transform: scaleX(0);
-  transform-origin:left center;
-  transition: transform .28s cubic-bezier(.2,.9,.3,1);
-  opacity:0.95;
-}
-.topnav .links a:hover,
-.topnav .links a:focus{ transform: translateY(-3px); outline:none; }
-.topnav .links a:hover::after,
-.topnav .links a.active::after { transform: scaleX(1); }
 
-/* ---------- MAIN / CONTENT ---------- */
+/* MAIN CONTENT */
 .content{ width:100%; max-width:var(--maxw); padding:22px; }
 .section{ margin:18px 0 60px; background:transparent; padding:8px 12px; border-radius:8px; }
-
-/* headings: make H2 visually match H1 (responsive) */
-.section h1,
-.section h2 {
+.section h1, .section h2 {
   text-align:center;
   margin:0 0 12px;
   font-weight:700;
@@ -96,11 +74,9 @@ body{
   font-size: clamp(1.25rem, 2.2vw + 0.6rem, 2rem);
   line-height:1.08;
 }
-
-/* anchor helper so fixed nav doesn't cover target */
 #scenario, #attendees { scroll-margin-top: calc(var(--nav-h) + 12px); }
 
-/* ---------- SCENARIO CARD ---------- */
+/* scenario card */
 .scenario-card{
   background: linear-gradient(180deg, rgba(255,255,255,var(--glass-alpha)), rgba(255,255,255,0.02));
   border:1px solid rgba(255,255,255,0.03);
@@ -110,143 +86,199 @@ body{
   transition: transform .28s cubic-bezier(.2,.9,.3,1), box-shadow .28s, background .28s;
   max-width: calc(var(--maxw) - 40px);
   margin:0 auto 8px;
-  position:relative;
 }
-.scenario-lead::first-letter{
-  font-size:1.5rem;
-  font-weight:800;
-  color:var(--accent);
-  float:left;
-  margin-right:8px;
-  line-height:1;
-}
-.scenario-more{
-  max-height:0;
-  overflow:hidden;
-  opacity:0;
-  transition: max-height .36s ease, opacity .36s ease;
-  margin-top:10px;
-  color:var(--muted);
-  font-size:.98rem;
-  line-height:1.6;
-}
-.scenario-card.expanded .scenario-more{ max-height:400px; opacity:1; }
-.scenario-card:hover,
-.scenario-card:focus-within{ transform: translateY(-6px); box-shadow:0 22px 60px rgba(0,0,0,0.65); }
-.scenario-toggle{
-  margin-top:12px;
-  background:transparent;
-  color:var(--accent);
-  border:0;
-  font-weight:700;
-  cursor:pointer;
-  padding:6px 10px;
-  border-radius:8px;
-  transition: background .18s, transform .18s;
-}
-.scenario-toggle:hover{ background: rgba(255,255,255,0.02); transform: translateY(-2px); }
 
-/* ---------- GALLERY (stacked single column) ---------- */
-.gallery{
+/* THUMB GRID - 4 columns */
+.thumb-grid{
   display:grid;
-  grid-template-columns:1fr; /* stacked */
-  gap:20px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  align-items:start;
+  justify-items:center;
   width:100%;
   max-width:var(--maxw);
   margin:0 auto;
-  opacity:0;
-  transform: translateY(6px);
-  animation: gallery-enter .6s ease forwards .12s;
+  padding-top:8px;
 }
-@keyframes gallery-enter{ to{ opacity:1; transform:none } }
 
-/* ---------- ATTENDEE / IMAGE RULES ---------- */
-/* layout for figure: center content so smaller images sit nicely */
-.attendee{
+/* each thumbnail figure */
+.thumb-item{
   display:flex;
   flex-direction:column;
   align-items:center;
-  text-align:center;
-  font-size:.95rem;
-  color:#ddd;
+  gap:8px;
+  width:100%;
+  max-width:320px;
+}
+
+/* make the name below each thumbnail larger */
+.thumb-item figcaption{
   margin:0;
-  padding-bottom:8px;
-  transition: transform .28s cubic-bezier(.2,.9,.3,1);
-  will-change:transform;
-  border-radius:10px;
-  background:transparent;
-  position:relative;
-  overflow:visible;
-}
-
-/* images:
-   - use intrinsic width by default (width:auto)
-   - never exceed container width (max-width:100%)
-   - let large images scale down; small images will not be upscaled
-*/
-.attendee img{
-  width:auto;            /* intrinsic size preserved */
-  max-width:100%;        /* but never overflow container */
-  height:auto;
-  object-fit:contain;    /* preserve whole image */
-  display:block;
-  border-radius:10px;
-  box-shadow:0 8px 24px rgba(0,0,0,0.5);
-  transition: transform .36s cubic-bezier(.2,.9,.3,1), filter .36s, box-shadow .36s;
-  filter:grayscale(.14) contrast(.98) saturate(.95);
-}
-
-/* overlay (hidden until hover) */
-.attendee .overlay{
-  position:absolute;
-  left:12px; right:12px; bottom:12px;
-  padding:8px 12px;
-  background:linear-gradient(180deg, rgba(0,0,0,0), rgba(0,0,0,0.62));
-  color:#fff; font-weight:700;
-  border-radius:8px; transform:translateY(12px); opacity:0;
-  transition: transform .28s ease, opacity .28s ease;
-  pointer-events:none; text-align:center;
-}
-
-/* hover / focus polish (small lift + scale on hover only) */
-.attendee:hover,
-.attendee:focus{ transform: translateY(-6px); z-index:2; outline:none; }
-.attendee:hover img,
-.attendee:focus img{ transform: scale(1.03); filter:none; box-shadow:0 20px 60px rgba(0,0,0,0.6); }
-.attendee:hover .overlay,
-.attendee:focus .overlay{ transform: translateY(0); opacity:1; pointer-events:auto; }
-
-/* caption under image — larger and clearer */
-.attendee figcaption{
-  margin-top:10px;
   color:var(--muted);
   font-weight:700;
+  font-size:1.15rem;      /* increased per request */
   text-align:center;
-  font-size:1.05rem; /* larger caption */
-  letter-spacing:-0.01em;
-  padding:6px 8px 10px;
-  display:inline-block;
-  background: rgba(255,255,255,0.02);
-  border-radius:6px;
+  padding:4px 6px;
 }
 
-/* keyboard focus styling */
-.attendee:focus{ outline:3px solid rgba(232,76,61,0.10); outline-offset:6px; }
+/* the small button/thumb (300x300) */
+.thumb{
+  background:transparent;
+  border:0;
+  padding:0;
+  cursor:pointer;
+  display:block;
+  width:100%;
+  aspect-ratio:1/1;
+  max-width:300px;
+  border-radius:8px;
+  overflow:hidden;
+  transition: transform .18s ease, box-shadow .18s ease;
+  will-change: transform;
+}
+.thumb img{
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:cover;
+  border-radius:6px;
+  transition: transform .18s ease, filter .18s ease;
+}
+
+/* subtle hover enlarge */
+.thumb:hover, .thumb:focus {
+  transform: scale(1.06);
+  box-shadow: 0 14px 40px rgba(0,0,0,0.55);
+  outline:none;
+}
+.thumb:hover img, .thumb:focus img {
+  transform: scale(1.02);
+  filter:none;
+}
+
+/* CHARACTER CARD MODAL */
+.card-modal{
+  position:fixed;
+  inset:0;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:2000;
+}
+.card-modal[aria-hidden="false"]{ display:flex; }
+
+/* backdrop */
+.card-backdrop{
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,0.6);
+}
+
+/* panel */
+.card-panel{
+  position:relative;
+  z-index:2100;
+  max-width:95vw;
+  width: auto;
+  margin: 20px;
+  border-radius:10px;
+  overflow:hidden;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.7);
+}
+
+/* inner layout: image (left) + text (right) */
+.card-inner{
+  display:flex;
+  gap:20px;
+  background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  padding:18px;
+  align-items:flex-start;
+}
+
+/* image wrapper */
+.card-image-wrap{
+  flex: 0 0 640px; /* fixed width for full image */
+  width:640px;
+  height:750px;
+  border-radius:8px;
+  overflow:hidden;
+  background:#222;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.card-image-wrap img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+/* text column to the right (now with readable panel: semi-opaque + blur) */
+.card-text{
+  flex:1 1 300px;
+  min-width:260px;
+  color:var(--text);
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+
+  /* readable panel */
+  background: rgba(0,0,0,0.46);
+  padding: 18px;
+  border-radius: 10px;
+  box-shadow: inset 0 2px 10px rgba(0,0,0,0.35), 0 10px 30px rgba(0,0,0,0.35);
+
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+/* heading inside the card text */
+.card-text h3{
+  margin:0;
+  font-size:1.35rem;
+  color:#fff;
+}
+
+/* body / bio copy — larger and higher contrast for readability */
+.card-bio{
+  color:#e6e7e9;
+  line-height:1.6;
+  font-size:1.05rem;
+}
+
+/* close button */
+.card-close{
+  position:absolute;
+  right:10px;
+  top:10px;
+  z-index:2200;
+  background:transparent;
+  border:0;
+  color:var(--text);
+  font-size:28px;
+  padding:6px 10px;
+  cursor:pointer;
+}
+
+/* responsive: on smaller screens stack image above text and scale image */
+@media (max-width:900px){
+  .thumb-grid{ grid-template-columns: repeat(4, 1fr); gap:12px; }
+  .card-inner{ flex-direction:column; align-items:center; }
+  .card-image-wrap{
+    width:90vw;
+    height: calc(90vw * 750 / 640);
+    max-height:80vh;
+  }
+  .card-text{ width:90vw; max-width:90vw; }
+}
+
+/* mobile: reduce columns to 2 */
+@media (max-width:520px){
+  .thumb-grid{ grid-template-columns: repeat(2, 1fr); gap:10px; }
+  .thumb{ max-width:300px; }
+  .thumb img{ width:100%; height:100%; object-fit:cover; }
+}
 
 /* footer */
 .site-footer{ padding:20px 0; opacity:.9; margin-bottom:40px; }
-
-/* responsive tweaks */
-@media (max-width:520px){
-  .topnav .nav-inner{ padding:0 10px; }
-  .scenario-card{ padding:14px; border-radius:10px; }
-  .attendee .overlay{ left:8px; right:8px; bottom:8px; padding:6px 8px; font-size:.95rem; }
-  .attendee figcaption{ font-size:1rem; }
-  /* on small screens, make images fill width for readability */
-  .attendee img{
-    width:100%;
-    max-width:100%;
-    height:auto;
-    object-fit:cover;
-  }
-}

@@ -23,41 +23,151 @@
     <!-- Scenario section (top text block) -->
     <section id="scenario" class="section">
       <h1>Scenario</h1>
-    
-      <!-- new wrapper -->
+
+      <!-- scenario card -->
       <div class="scenario-card" role="region" aria-labelledby="scenario-heading" tabindex="0">
         <p class="scenario-lead">
-          It's a stinky evening at the Naghmi manor. A scream breaks the night, and now
-          everyone is a suspect. Read below and meet the guests.
+          It's a beautiful winter evening at the Naghmi Manor...
         </p>
-    
-        <!-- optional extra text that is hidden until expand -->
+
+        <!-- optional extra text -->
         <p class="scenario-more" aria-hidden="true">
-          Some optional / additional text here
+          
         </p>
-    
+
         <button type="button" class="scenario-toggle" aria-expanded="false">Read more</button>
       </div>
     </section>
 
-    <!-- Attendees (gallery) -->
+    <!-- Attendees (thumbnail grid) -->
     <section id="attendees" class="section">
       <h2>Attendees</h2>
-      <div class="gallery">
-        <!-- Repeat one line per attendee image -->
-        <figure class="attendee" tabindex="0" data-name="Zain, the host">
-          <img src="images/attendee1.png" alt="Zain, the host" loading="lazy">
-          <figcaption>Zain, the host</figcaption>
-          <span class="overlay" aria-hidden="true">Host • Suspect</span>
+
+      <!-- thumb grid: 4 columns -->
+      <div class="thumb-grid" aria-label="Attendee thumbnails">
+
+        <!-- Zain -->
+        <figure class="thumb-item">
+          <button class="thumb"
+                  data-full="images/cropped_zain.png"
+                  data-name="Zain — Host"
+                  data-bio="<strong>Zain Naghmi</strong><br/>Host of the manor. <br/><br/>Clue: Zain is Zain"
+                  aria-label="Open profile for Zain">
+            <img src="images/small_zain.png" alt="Zain thumbnail" width="300" height="300">
+          </button>
+          <figcaption>Zain</figcaption>
         </figure>
 
-        <figure class="attendee" tabindex="0" data-name="Mario, the ">
-          <img src="images/attendee2.png" alt="Mario, the " loading="lazy">
-          <figcaption>Mario, the ?</figcaption>
-          <span class="overlay" aria-hidden="true">Guest • Suspect</span>
+        <!-- Hena -->
+        <figure class="thumb-item">
+          <button class="thumb"
+                  data-full="images/cropped_hena.png"
+                  data-name="Hena — Manager"
+                  data-bio="<strong>Hena Naghmi</strong><br/>The manor manager.<br/><br/>alskdjflaksdjflkasd"
+                  aria-label="Open profile for Hena">
+            <img src="images/small_hena.png" alt="Hena thumbnail" width="300" height="300">
+          </button>
+          <figcaption>Hena</figcaption>
         </figure>
 
-        <!-- more attendee <figure> blocks for each photo -->
+        <!-- Kevin -->
+        <figure class="thumb-item">
+          <button class="thumb"
+                  data-full="images/cropped_kevin.png"
+                  data-name="Kevin — Butler"
+                  data-bio="<strong>Kevin</strong><br/>Longtime butler. He knows the household routines and is always on time.<br/><br/>Clue: Is the butler."
+                  aria-label="Open profile for Kevin">
+            <img src="images/small_kevin.png" alt="Kevin thumbnail" width="300" height="300">
+          </button>
+          <figcaption>Kevin</figcaption>
+        </figure>
+
+        <!-- Mario -->
+        <figure class="thumb-item">
+          <button class="thumb"
+                  data-full="images/cropped_mario.png"
+                  data-name="Wolfgang Storm — Controller Modder"
+                  data-bio="<strong>Wolfgang Storm</strong><br/>lol.<br/><br/>The allegations are true"
+                  aria-label="Open profile for Mario">
+            <img src="images/small_mario.png" alt="Mario thumbnail" width="300" height="300">
+          </button>
+          <figcaption>Wolfgang Storm</figcaption>
+        </figure>
+
+        <!-- Eric -->
+        <figure class="thumb-item">
+          <button class="thumb"
+                  data-full="images/cropped_eric.png"
+                  data-name="Eric — Rival"
+                  data-bio="<strong>Eric</strong><br/>lol.<br/><br/>The allegations are true"
+                  aria-label="Open profile for Eric">
+            <img src="images/small_eric.png" alt="Eric thumbnail" width="300" height="300">
+          </button>
+          <figcaption>Eric</figcaption>
+        </figure>
+
+        <!-- Darren -->
+        <figure class="thumb-item">
+          <button class="thumb"
+                  data-full="images/cropped_darren.png"
+                  data-name="Darren — Doubles Partner"
+                  data-bio="<strong>Darren</strong><br/>lol.<br/><br/>The allegations are true"
+                  aria-label="Open profile for Darren">
+            <img src="images/small_darren.png" alt="Darren thumbnail" width="300" height="300">
+          </button>
+          <figcaption>Darren</figcaption>
+        </figure>
+
+        <!-- Aarij -->
+        <figure class="thumb-item">
+          <button class="thumb"
+                  data-full="images/cropped_aarij.png"
+                  data-name="Ludoo — Streamer"
+                  data-bio="<strong>Ludoo</strong><br/>lol.<br/><br/>The allegations are true"
+                  aria-label="Open profile for Ludoo">
+            <img src="images/small_aarij.png" alt="Ludoo thumbnail" width="300" height="300">
+          </button>
+          <figcaption>Ludoo</figcaption>
+        </figure>
+
+        <!-- Adil -->
+        <figure class="thumb-item">
+          <button class="thumb"
+                  data-full="images/cropped_adil.png"
+                  data-name="Gstubs — Twitch Chatter"
+                  data-bio="<strong>Gstubs</strong><br/>lol.<br/><br/>The allegations are true"
+                  aria-label="Open profile for Gstubs">
+            <img src="images/small_adil.png" alt="Adil thumbnail" width="300" height="300">
+          </button>
+          <figcaption>Adil</figcaption>
+        </figure>
+
+        <!-- David -->
+        <figure class="thumb-item">
+          <button class="thumb"
+                  data-full="images/cropped_david.png"
+                  data-name="David — Tuber"
+                  data-bio="<strong>David</strong><br/>lol.<br/><br/>The allegations are true"
+                  aria-label="Open profile for David">
+            <img src="images/small_david.png" alt="David thumbnail" width="300" height="300">
+          </button>
+          <figcaption>David</figcaption>
+        </figure>
+
+        <!-- add more .thumb-item blocks as needed (use data-full / data-name / data-bio) -->
+        <!-- EXAMPLE 
+        <figure class="thumb-item">
+          <button class="thumb"
+                  data-full="images/cropped_EXAMPLE.png"
+                  data-name="EXAMPLE — Rival"
+                  data-bio="<strong>EXAMPLE</strong><br/>lol.<br/><br/>The allegations are true"
+                  aria-label="Open profile for EXAMPLE">
+            <img src="images/small_EXAMPLE.png" alt="EXAMPLE thumbnail" width="300" height="300">
+          </button>
+          <figcaption>EXAMPLE</figcaption>
+        </figure>
+        -->
+
       </div>
     </section>
   </main>
@@ -66,63 +176,128 @@
     © Kevin Hoang
   </footer>
 
+  <!-- CHARACTER CARD MODAL -->
+  <div id="cardModal" class="card-modal" aria-hidden="true" role="dialog" aria-label="Character card">
+    <div class="card-backdrop" data-action="close"></div>
+
+    <div class="card-panel" role="document">
+      <button class="card-close" aria-label="Close character card" data-action="close">&times;</button>
+
+      <div class="card-inner">
+        <div class="card-image-wrap">
+          <img id="cardImage" src="" alt="Full character image">
+        </div>
+
+        <div class="card-text">
+          <h3 id="cardName">Character Name</h3>
+          <!-- card-bio will be replaced per character -->
+          <div id="cardBio" class="card-bio" aria-live="polite"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const card = document.querySelector('.scenario-card');
-      if (!card) return;
-    
-      const btn = card.querySelector('.scenario-toggle');
-      const more = card.querySelector('.scenario-more');
-    
-      // Defensive: if elements missing, bail gracefully
-      if (!btn || !more) {
-        console.warn('Scenario toggle or more content not found.');
-        return;
+  // scenario toggle logic
+  document.addEventListener('DOMContentLoaded', () => {
+    const card = document.querySelector('.scenario-card');
+    if (!card) return;
+
+    const btn = card.querySelector('.scenario-toggle');
+    const more = card.querySelector('.scenario-more');
+
+    if (!btn || !more) return;
+
+    more.style.maxHeight = '0px';
+    more.setAttribute('aria-hidden', 'true');
+
+    function setExpanded(expanded) {
+      btn.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+      if (expanded) {
+        more.style.maxHeight = `${more.scrollHeight}px`;
+        more.setAttribute('aria-hidden', 'false');
+        card.classList.add('expanded');
+      } else {
+        more.style.maxHeight = '0px';
+        more.setAttribute('aria-hidden', 'true');
+        card.classList.remove('expanded');
       }
-    
-      // Ensure collapsed initial state
-      more.style.maxHeight = more.classList.contains('expanded') ? `${more.scrollHeight}px` : '0px';
-      more.setAttribute('aria-hidden', more.style.maxHeight === '0px' ? 'true' : 'false');
-    
-      function setExpanded(expanded) {
-        btn.setAttribute('aria-expanded', expanded ? 'true' : 'false');
-        if (expanded) {
-          // set to exact scrollHeight so transition animates correctly
-          more.style.maxHeight = `${more.scrollHeight}px`;
-          more.setAttribute('aria-hidden', 'false');
-          card.classList.add('expanded');
-        } else {
-          // collapse
-          more.style.maxHeight = '0px';
-          more.setAttribute('aria-hidden', 'true');
-          card.classList.remove('expanded');
-        }
+    }
+
+    btn.addEventListener('click', () => {
+      const isExpanded = btn.getAttribute('aria-expanded') === 'true';
+      setExpanded(!isExpanded);
+    });
+
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        btn.click();
       }
-    
-      // click handler
+    });
+
+    more.addEventListener('transitionend', (ev) => {
+      if (ev.propertyName === 'max-height' && btn.getAttribute('aria-expanded') === 'true') {
+        more.style.maxHeight = 'none';
+      }
+    });
+  });
+
+  // Thumbnail -> modal logic (uses per-button data-bio)
+  (function () {
+    const modal = document.getElementById('cardModal');
+    const modalBackdrop = modal.querySelector('.card-backdrop');
+    const modalCloseButtons = modal.querySelectorAll('[data-action="close"]');
+    const cardImage = document.getElementById('cardImage');
+    const cardName = document.getElementById('cardName');
+    const cardBio = document.getElementById('cardBio');
+
+    function openCard(fullSrc, name, bioHtml, thumbBtn) {
+      cardImage.src = fullSrc;
+      cardImage.alt = name;
+      cardName.textContent = name;
+      // bioHtml contains markup (set by data-bio)
+      cardBio.innerHTML = bioHtml || '<p>No details provided.</p>';
+
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden'; // prevent background scroll
+      modal.querySelector('.card-close').focus();
+      modal._lastFocus = thumbBtn || document.activeElement;
+    }
+
+    function closeCard() {
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      cardImage.src = '';
+      cardBio.innerHTML = '';
+      if (modal._lastFocus) modal._lastFocus.focus();
+    }
+
+    // attach handlers
+    document.querySelectorAll('.thumb').forEach(btn => {
       btn.addEventListener('click', () => {
-        const isExpanded = btn.getAttribute('aria-expanded') === 'true';
-        setExpanded(!isExpanded);
+        const full = btn.getAttribute('data-full');
+        const name = btn.getAttribute('data-name') || 'Character';
+        const bio = btn.getAttribute('data-bio') || '';
+        openCard(full, name, bio, btn);
       });
-    
-      // keyboard toggle on Enter/Space when card focused
-      card.addEventListener('keydown', (e) => {
+
+      btn.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
           btn.click();
         }
       });
-    
-      // Optional: when the panel finishes expanding, clear inline maxHeight to allow responsive wrapping
-      more.addEventListener('transitionend', (ev) => {
-        if (ev.propertyName === 'max-height' && btn.getAttribute('aria-expanded') === 'true') {
-          // allow it to size naturally after animation
-          more.style.maxHeight = 'none';
-        }
-      });
-    
     });
-    </script>
-    
+
+    modalBackdrop.addEventListener('click', closeCard);
+    modalCloseButtons.forEach(b => b.addEventListener('click', closeCard));
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.getAttribute('aria-hidden') === 'false') closeCard();
+    });
+
+  })();
+  </script>
+
 </body>
 </html>
