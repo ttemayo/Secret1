@@ -129,31 +129,43 @@ body{
   padding:4px 6px;
 }
 
-/* the small button/thumb (300x300) */
+/* ===== Thumb: reliable square container (prevents uneven sizing on mobile) ===== */
+
+/* container: responsive square using padding-top trick (always 1:1) */
 .thumb{
   background:transparent;
   border:0;
   padding:0;
   cursor:pointer;
   display:block;
+
+  /* fill the grid column fully, but cap the visual size */
   width:100%;
-  aspect-ratio:1/1;
   max-width:300px;
+
+  /* create a perfect square box regardless of image intrinsic size */
+  position:relative;
+  padding-top:100%;       /* square aspect ratio */
   border-radius:8px;
   overflow:hidden;
+
   transition: transform .18s ease, box-shadow .18s ease;
   will-change: transform;
 }
+
+/* the img is absolutely positioned to fill that square */
 .thumb img{
+  position:absolute;
+  inset:0;                /* top:0; right:0; bottom:0; left:0 */
   width:100%;
   height:100%;
   display:block;
-  object-fit:cover;
-  border-radius:6px;
+  object-fit:cover;       /* crop consistently, centered */
+  border-radius:0;        /* container handles rounding */
   transition: transform .18s ease, filter .18s ease;
 }
 
-/* subtle hover enlarge */
+/* subtle hover enlarge; apply to the square container */
 .thumb:hover, .thumb:focus {
   transform: scale(1.06);
   box-shadow: 0 14px 40px rgba(0,0,0,0.55);
@@ -313,11 +325,20 @@ body{
   }
 }
 
-/* mobile: reduce columns to 2 */
+/* mobile: reduce columns to 2 and ensure thumbs fill cell uniformly */
 @media (max-width:520px){
   .thumb-grid{ grid-template-columns: repeat(2, 1fr); gap:10px; }
-  .thumb{ max-width:300px; }
-  .thumb img{ width:100%; height:100%; object-fit:cover; }
+
+  /* let the thumb fully fill its grid cell (no fixed max causing unevenness) */
+  .thumb{
+    max-width:100%;
+    padding-top:100%; /* still a square */
+  }
+
+  /* image keeps covering the square without stretching */
+  .thumb img{
+    object-fit:cover;
+  }
 }
 
 /* footer */
