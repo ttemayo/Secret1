@@ -21,6 +21,12 @@
   </nav>
 
   <main class="content">
+
+    <!-- Setting image: same max width as the scenario box -->
+    <div class="hero-wrapper" aria-hidden="false">
+      <img class="setting-image" src="images/murderhouse.png" alt="Naghmi Manor exterior — the setting">
+    </div>
+
     <!-- Scenario section (top text block) -->
     <section id="scenario" class="section">
       <h1>Scenario</h1>
@@ -209,7 +215,7 @@
   </div>
 
   <script>
-  // scenario toggle logic
+  // scenario toggle logic 
   document.addEventListener('DOMContentLoaded', () => {
     const card = document.querySelector('.scenario-card');
     if (!card) return;

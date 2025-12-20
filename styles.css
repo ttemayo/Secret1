@@ -76,16 +76,92 @@ body{
 }
 #scenario, #attendees, #detective { scroll-margin-top: calc(var(--nav-h) + 12px); }
 
-/* scenario card */
+/* HERO/SETTING IMAGE (matches scenario box width) */
+.hero-wrapper{
+  display:flex;
+  justify-content:center;
+  margin: 16px 0 8px;
+}
+.setting-image{
+  width:100%;
+  max-width: calc(var(--maxw) - 40px); /* matches scenario card max width */
+  display:block;
+  border-radius:10px;
+  box-shadow: 0 18px 40px rgba(0,0,0,0.55);
+  object-fit:cover;
+}
+
 .scenario-card{
-  background: linear-gradient(180deg, rgba(255,255,255,var(--glass-alpha)), rgba(255,255,255,0.02));
-  border:1px solid rgba(255,255,255,0.03);
-  padding:18px;
-  border-radius:12px;
-  box-shadow:0 10px 30px rgba(0,0,0,0.55);
-  transition: transform .28s cubic-bezier(.2,.9,.3,1), box-shadow .28s, background .28s;
+  /* softer, more neutral surface */
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.035);
+  border-left: 4px solid rgba(255,90,82,0.08);   /* slim accent stripe */
+  padding:16px;
+  border-radius:10px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.40);       /* gentler shadow */
+  transition: transform .22s cubic-bezier(.2,.9,.3,1), box-shadow .22s, background .22s;
   max-width: calc(var(--maxw) - 40px);
-  margin:0 auto 8px;
+  margin: 0 auto 8px;
+  backdrop-filter: blur(4px);                    /* soft glass feel */
+}
+
+/* Slight lift when focused or hovered, still restrained */
+.scenario-card:hover,
+.scenario-card:focus-within{
+  transform: translateY(-4px);
+  box-shadow: 0 12px 36px rgba(0,0,0,0.45);
+}
+
+/* lead paragraph: cleaner spacing and readable size */
+.scenario-lead{
+  margin:0 0 8px;
+  font-size:1.02rem;
+  color: #e9e9ea;
+  line-height:1.55;
+  letter-spacing: -0.01em;
+}
+
+/* hidden/expanded content keeps smooth reveal */
+.scenario-more{
+  max-height:0;
+  overflow:hidden;
+  opacity:0;
+  transition: max-height .36s ease, opacity .36s ease, transform .36s ease;
+  margin-top:10px;
+  color: var(--muted);
+  font-size:.98rem;
+  line-height:1.6;
+}
+.scenario-card.expanded .scenario-more{
+  max-height: 600px; /* enough room for copy */
+  opacity:1;
+  transform: none;
+}
+
+/* subtle pill button — quiet, readable, and accessible */
+.scenario-toggle{
+  display:inline-block;
+  margin-top:10px;
+  background: transparent;
+  color: rgba(255,90,82,0.97); /* accent color for action */
+  border: 1px solid rgba(255,90,82,0.12);
+  padding:8px 12px;
+  font-weight:700;
+  border-radius:999px;
+  cursor:pointer;
+  transition: background .16s ease, transform .12s ease, box-shadow .16s;
+  box-shadow: 0 2px 0 rgba(0,0,0,0.06);
+}
+.scenario-toggle:hover,
+.scenario-toggle:focus{
+  background: rgba(255,90,82,0.06);
+  transform: translateY(-2px);
+  outline: none;
+}
+
+/* accessible focus ring for keyboard users */
+.scenario-toggle:focus{
+  box-shadow: 0 0 0 4px rgba(255,90,82,0.075), 0 2px 8px rgba(0,0,0,0.12);
 }
 
 /* DETECTIVE — centered single thumbnail */
@@ -124,7 +200,7 @@ body{
   margin:0;
   color:var(--muted);
   font-weight:700;
-  font-size:1.15rem;      /* increased per request */
+  font-size:1.15rem;
   text-align:center;
   padding:4px 6px;
 }
