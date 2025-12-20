@@ -12,6 +12,10 @@
   --accent-grad-start:#ff5a52;
   --accent-grad-end:#ff7b6c;
   --muted:#a6aab0;
+
+  /* hero overlay controls (adjust for more/less prominence) */
+  --hero-overlay-opacity: 0.45; /* 0.25 subtle / 0.45 moderate / 0.6 strong */
+  --hero-desaturate: 0.12;      /* 0 = unchanged, 1 = grayscale */
 }
 
 /* reset / layout */
@@ -76,43 +80,56 @@ body{
 }
 #scenario, #attendees, #detective { scroll-margin-top: calc(var(--nav-h) + 12px); }
 
-/* HERO/SETTING IMAGE (matches scenario box width) */
+/* HERO/SETTING IMAGE (matches scenario box width) with overlay */
 .hero-wrapper{
   display:flex;
   justify-content:center;
   margin: 16px 0 8px;
+  position:relative; /* required for overlay pseudo-element */
+  max-width: calc(var(--maxw) - 40px);
+  width:100%;
+  pointer-events: none; /* prevents accidental clicks on wrapper; image remains non-interactive */
+  border-radius:10px;
+}
+.hero-wrapper::before{
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 10px;
+  background: rgba(0,0,0,var(--hero-overlay-opacity));
+  pointer-events: none;
+  transition: background .22s ease;
 }
 .setting-image{
   width:100%;
-  max-width: calc(var(--maxw) - 40px); /* matches scenario card max width */
+  max-width: inherit;
   display:block;
   border-radius:10px;
   box-shadow: 0 18px 40px rgba(0,0,0,0.55);
   object-fit:cover;
+  filter: saturate(calc(1 - var(--hero-desaturate))) contrast(0.98);
+  transition: filter .22s ease, transform .22s ease;
+  position:relative;
 }
 
+/* ---- Subtle, professional scenario card ---- */
 .scenario-card{
-  /* softer, more neutral surface */
   background: rgba(255,255,255,0.03);
   border: 1px solid rgba(255,255,255,0.035);
-  border-left: 4px solid rgba(255,90,82,0.08);   /* slim accent stripe */
+  border-left: 4px solid rgba(255,90,82,0.08);
   padding:16px;
   border-radius:10px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.40);       /* gentler shadow */
+  box-shadow: 0 6px 20px rgba(0,0,0,0.40);
   transition: transform .22s cubic-bezier(.2,.9,.3,1), box-shadow .22s, background .22s;
   max-width: calc(var(--maxw) - 40px);
   margin: 0 auto 8px;
-  backdrop-filter: blur(4px);                    /* soft glass feel */
+  backdrop-filter: blur(4px);
 }
-
-/* Slight lift when focused or hovered, still restrained */
 .scenario-card:hover,
 .scenario-card:focus-within{
   transform: translateY(-4px);
   box-shadow: 0 12px 36px rgba(0,0,0,0.45);
 }
-
-/* lead paragraph: cleaner spacing and readable size */
 .scenario-lead{
   margin:0 0 8px;
   font-size:1.02rem;
@@ -120,8 +137,6 @@ body{
   line-height:1.55;
   letter-spacing: -0.01em;
 }
-
-/* hidden/expanded content keeps smooth reveal */
 .scenario-more{
   max-height:0;
   overflow:hidden;
@@ -133,17 +148,15 @@ body{
   line-height:1.6;
 }
 .scenario-card.expanded .scenario-more{
-  max-height: 600px; /* enough room for copy */
+  max-height: 600px;
   opacity:1;
   transform: none;
 }
-
-/* subtle pill button — quiet, readable, and accessible */
 .scenario-toggle{
   display:inline-block;
   margin-top:10px;
   background: transparent;
-  color: rgba(255,90,82,0.97); /* accent color for action */
+  color: rgba(255,90,82,0.97);
   border: 1px solid rgba(255,90,82,0.12);
   padding:8px 12px;
   font-weight:700;
@@ -158,8 +171,6 @@ body{
   transform: translateY(-2px);
   outline: none;
 }
-
-/* accessible focus ring for keyboard users */
 .scenario-toggle:focus{
   box-shadow: 0 0 0 4px rgba(255,90,82,0.075), 0 2px 8px rgba(0,0,0,0.12);
 }
@@ -206,42 +217,31 @@ body{
 }
 
 /* ===== Thumb: reliable square container (prevents uneven sizing on mobile) ===== */
-
-/* container: responsive square using padding-top trick (always 1:1) */
 .thumb{
   background:transparent;
   border:0;
   padding:0;
   cursor:pointer;
   display:block;
-
-  /* fill the grid column fully, but cap the visual size */
   width:100%;
   max-width:300px;
-
-  /* create a perfect square box regardless of image intrinsic size */
   position:relative;
   padding-top:100%;       /* square aspect ratio */
   border-radius:8px;
   overflow:hidden;
-
   transition: transform .18s ease, box-shadow .18s ease;
   will-change: transform;
 }
-
-/* the img is absolutely positioned to fill that square */
 .thumb img{
   position:absolute;
-  inset:0;                /* top:0; right:0; bottom:0; left:0 */
+  inset:0;
   width:100%;
   height:100%;
   display:block;
-  object-fit:cover;       /* crop consistently, centered */
-  border-radius:0;        /* container handles rounding */
+  object-fit:cover;
+  border-radius:0;
   transition: transform .18s ease, filter .18s ease;
 }
-
-/* subtle hover enlarge; apply to the square container */
 .thumb:hover, .thumb:focus {
   transform: scale(1.06);
   box-shadow: 0 14px 40px rgba(0,0,0,0.55);
@@ -280,10 +280,10 @@ body{
   width: auto;
   margin: 20px;
   border-radius:10px;
-  overflow:auto; /* allow panel to scroll on smaller screens */
+  overflow:auto;
   -webkit-overflow-scrolling: touch;
   box-shadow: 0 30px 80px rgba(0,0,0,0.7);
-  max-height: 95vh; /* makes panel fit the viewport */
+  max-height: 95vh;
 }
 
 /* inner layout: image (left) + text (right) */
@@ -297,7 +297,7 @@ body{
 
 /* image wrapper */
 .card-image-wrap{
-  flex: 0 0 640px; /* fixed width for full image */
+  flex: 0 0 640px;
   width:640px;
   height:750px;
   border-radius:8px;
@@ -314,7 +314,7 @@ body{
   display:block;
 }
 
-/* text column to the right (now with readable panel: semi-opaque + blur) */
+/* text column to the right (readable panel: semi-opaque + blur) */
 .card-text{
   flex:1 1 300px;
   min-width:260px;
@@ -322,30 +322,23 @@ body{
   display:flex;
   flex-direction:column;
   gap:14px;
-
-  /* readable panel */
   background: rgba(0,0,0,0.46);
   padding: 18px;
   border-radius: 10px;
   box-shadow: inset 0 2px 10px rgba(0,0,0,0.35), 0 10px 30px rgba(0,0,0,0.35);
-
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
 }
-
-/* heading inside the card text */
 .card-text h3{
   margin:0;
   font-size:1.35rem;
   color:#fff;
 }
-
-/* body / bio copy — larger and higher contrast for readability */
 .card-bio{
   color:#e6e7e9;
   line-height:1.6;
   font-size:1.05rem;
-  overflow:auto; /* allow the bio area to scroll if long */
+  overflow:auto;
   -webkit-overflow-scrolling: touch;
 }
 
@@ -368,28 +361,25 @@ body{
   .thumb-grid{ grid-template-columns: repeat(4, 1fr); gap:12px; }
   .card-inner{ flex-direction:column; align-items:center; }
 
-  /* make the image contained so it won't crop */
   .card-image-wrap{
     width:90vw;
     height:auto;
-    max-height:60vh; /* keeps it from dominating the viewport */
+    max-height:60vh;
   }
   .card-image-wrap img{
     width:100%;
     height:100%;
-    object-fit:contain; /* ensure full image visible, no cropping */
+    object-fit:contain;
   }
 
-  /* ensure the text area can scroll inside the panel */
   .card-text{
     width:90vw;
     max-width:90vw;
-    max-height: calc(95vh - 60vh - 80px); /* remaining vertical space for text */
+    max-height: calc(95vh - 60vh - 80px);
     overflow:auto;
     -webkit-overflow-scrolling: touch;
   }
 
-  /* keep the close button always reachable on mobile */
   .card-close{
     position:fixed;
     right:12px;
@@ -405,16 +395,18 @@ body{
 @media (max-width:520px){
   .thumb-grid{ grid-template-columns: repeat(2, 1fr); gap:10px; }
 
-  /* let the thumb fully fill its grid cell (no fixed max causing unevenness) */
+  /* let the thumb fully fill its grid cell */
   .thumb{
     max-width:100%;
-    padding-top:100%; /* still a square */
+    padding-top:100%;
   }
-
-  /* image keeps covering the square without stretching */
   .thumb img{
     object-fit:cover;
   }
+
+  /* slightly stronger hero overlay on small screens */
+  :root { --hero-overlay-opacity: 0.55; }
+  .setting-image{ filter: saturate(calc(1 - var(--hero-desaturate))) contrast(0.95); }
 }
 
 /* footer */
