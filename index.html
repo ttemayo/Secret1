@@ -111,7 +111,7 @@
           <button class="thumb"
                   data-full="images/cropped_mario.png"
                   data-name="Wolfgang Storm — Controller Modder"
-                  data-bio="<strong>Wolfgang Storm</strong><br/>lol.<br/><br/>The allegations are true"
+                  data-bio="<strong>Mario</strong><br/>lol.<br/><br/>The allegations are true"
                   aria-label="Open profile for Wolfgang">
             <img src="images/small_mario.png" alt="Wolfgang thumbnail" width="300" height="300">
           </button>
@@ -122,24 +122,24 @@
         <figure class="thumb-item">
           <button class="thumb"
                   data-full="images/cropped_eric.png"
-                  data-name="Eric — Rival"
+                  data-name="Strawberry Milkman — Rival"
                   data-bio="<strong>Eric</strong><br/>lol.<br/><br/>The allegations are true"
                   aria-label="Open profile for Eric">
             <img src="images/small_eric.png" alt="Eric thumbnail" width="300" height="300">
           </button>
-          <figcaption>Eric</figcaption>
+          <figcaption>Strawberry Milkman</figcaption>
         </figure>
 
         <!-- Darren -->
         <figure class="thumb-item">
           <button class="thumb"
                   data-full="images/cropped_darren.png"
-                  data-name="Darren — Doubles Partner"
+                  data-name="Softserv — Doubles Partner"
                   data-bio="<strong>Darren</strong><br/>lol.<br/><br/>The allegations are true"
                   aria-label="Open profile for Darren">
             <img src="images/small_darren.png" alt="Darren thumbnail" width="300" height="300">
           </button>
-          <figcaption>Darren</figcaption>
+          <figcaption>Softserv</figcaption>
         </figure>
 
         <!-- Aarij -->
@@ -161,21 +161,21 @@
                   data-name="Gstubs — Twitch Chatter"
                   data-bio="<strong>Gstubs</strong><br/>lol.<br/><br/>The allegations are true"
                   aria-label="Open profile for Gstubs">
-            <img src="images/small_adil.png" alt="Adil thumbnail" width="300" height="300">
+            <img src="images/small_adil.png" alt="Gstub thumbnail" width="300" height="300">
           </button>
-          <figcaption>Adil</figcaption>
+          <figcaption>Gstubs</figcaption>
         </figure>
 
         <!-- David -->
         <figure class="thumb-item">
           <button class="thumb"
                   data-full="images/cropped_david.png"
-                  data-name="David — Tuber"
+                  data-name="Dave — Tuber"
                   data-bio="<strong>David</strong><br/>lol.<br/><br/>The allegations are true"
                   aria-label="Open profile for David">
             <img src="images/small_david.png" alt="David thumbnail" width="300" height="300">
           </button>
-          <figcaption>David</figcaption>
+          <figcaption>Dave</figcaption>
         </figure>
 
       </div>
@@ -190,7 +190,8 @@
   <div id="cardModal" class="card-modal" aria-hidden="true" role="dialog" aria-label="Character card">
     <div class="card-backdrop" data-action="close"></div>
 
-    <div class="card-panel" role="document">
+    <!-- note: added id and tabindex so script can reset and focus the panel -->
+    <div id="cardPanel" class="card-panel" role="document" tabindex="-1">
       <button class="card-close" aria-label="Close character card" data-action="close">&times;</button>
 
       <div class="card-inner">
@@ -253,7 +254,7 @@
     });
   });
 
-  // Thumbnail -> modal logic (uses per-button data-bio)
+  // Thumbnail -> modal logic (reset scroll, trap focus while open, and ensure close is reachable)
   (function () {
     const modal = document.getElementById('cardModal');
     const modalBackdrop = modal.querySelector('.card-backdrop');
@@ -261,17 +262,30 @@
     const cardImage = document.getElementById('cardImage');
     const cardName = document.getElementById('cardName');
     const cardBio = document.getElementById('cardBio');
+    const modalPanel = document.getElementById('cardPanel');
 
     function openCard(fullSrc, name, bioHtml, thumbBtn) {
+      // set content (leave user-provided text alone)
       cardImage.src = fullSrc;
       cardImage.alt = name;
       cardName.textContent = name;
-      // bioHtml contains markup (set by data-bio)
       cardBio.innerHTML = bioHtml || '<p>No details provided.</p>';
 
+      // show modal
       modal.setAttribute('aria-hidden', 'false');
-      document.body.style.overflow = 'hidden'; // prevent background scroll
-      modal.querySelector('.card-close').focus();
+
+      // lock body scroll but allow panel scrolling
+      document.body.style.overflow = 'hidden';
+
+      // reset panel scroll so viewer starts at top
+      if (modalPanel) modalPanel.scrollTop = 0;
+      if (cardBio) cardBio.scrollTop = 0;
+
+      // focus close button for keyboard users
+      const closeBtn = modal.querySelector('.card-close');
+      if (closeBtn) closeBtn.focus();
+
+      // remember origin for focus restore
       modal._lastFocus = thumbBtn || document.activeElement;
     }
 
@@ -280,10 +294,11 @@
       document.body.style.overflow = '';
       cardImage.src = '';
       cardBio.innerHTML = '';
+      // restore focus to originating element
       if (modal._lastFocus) modal._lastFocus.focus();
     }
 
-    // attach handlers
+    // attach handlers to thumbnails
     document.querySelectorAll('.thumb').forEach(btn => {
       btn.addEventListener('click', () => {
         const full = btn.getAttribute('data-full');
@@ -300,11 +315,21 @@
       });
     });
 
+    // close interactions
     modalBackdrop.addEventListener('click', closeCard);
     modalCloseButtons.forEach(b => b.addEventListener('click', closeCard));
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && modal.getAttribute('aria-hidden') === 'false') closeCard();
     });
+
+    // simple focus trap: send focus back to close button if focus leaves modal while open
+    document.addEventListener('focus', (ev) => {
+      if (modal.getAttribute('aria-hidden') === 'false' && !modal.contains(ev.target)) {
+        ev.stopPropagation();
+        const closeBtn = modal.querySelector('.card-close');
+        if (closeBtn) closeBtn.focus();
+      }
+    }, true);
 
   })();
   </script>
